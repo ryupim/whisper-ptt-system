@@ -15,7 +15,9 @@ LOG="/tmp/whisper_ptt.log"
 # whisper.cpp をビルド時と別の場所へ移動すると、whisper-cli に焼き込まれた
 # rpath が旧パスを指したままで libwhisper/libggml 等の dylib を読めず Abort する。
 # 新しい build 配下を dyld のフォールバック検索パスに追加して解決する。
-export DYLD_FALLBACK_LIBRARY_PATH="$WHISPER_DIR/build/src:$WHISPER_DIR/build/ggml/src:$WHISPER_DIR/build/ggml/src/ggml-blas:$WHISPER_DIR/build/ggml/src/ggml-metal:/usr/local/lib:/usr/lib"
+# （export せず、後段の whisper-cli 起動時のみに付与する。helper には波及させない）
+WBUILD="$WHISPER_DIR/build"
+DYLD_FB="$WBUILD/src:$WBUILD/ggml/src:$WBUILD/ggml/src/ggml-blas:$WBUILD/ggml/src/ggml-metal:/usr/local/lib:/usr/lib"
 
 # ログは毎回上書き（肥大化しない）
 echo "===== $(date) =====" > "$LOG"
@@ -37,7 +39,7 @@ else
 fi
 
 # 1) 文字起こし（出力は全部ログへ）
-"$WHISPER_BIN" \
+DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FB" "$WHISPER_BIN" \
   -m "$MODEL" \
   -f "$REC_WAV" \
   -l ja \
