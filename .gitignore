@@ -1,0 +1,27 @@
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ===== Editor / IDE =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== Hammerspoon（init.lua 以外を誤って追加しないように）=====
+.hammerspoon/Spoons/
+.hammerspoon/*.log
+.hammerspoon/old_init.lua
+
+# ===== ランタイム成果物（録音 / ログ / PID）=====
+# 通常は /tmp に出力され追跡対象外だが、出力先を変えた場合の保険
+*.wav
+*.log
+*.pid
+
+# ===== 環境設定 =====
+.env
+.env.*
