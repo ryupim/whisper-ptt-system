@@ -72,11 +72,11 @@ local function transcribe()
       hs.pasteboard.setContents(out)   -- ★ pbcopy ではなく Hammerspoon が直接コピー
       setState("done")
       hs.eventtap.keyStrokes(out)        -- ★ 認識テキストを直接入力
+      hs.timer.doAfter(1.2, function() setState("idle") end)  -- ✅ を 1.2秒後に元へ戻す
     else
       notify("out is empty")
-      setState("idle")
+      setState("idle")                   -- 失敗時は即 idle（戻し用タイマー不要）
     end
-    hs.timer.doAfter(1.2, function() setState("idle") end)
   end, {scriptDir .. "/record_stop.sh"}):start()
 end
 
